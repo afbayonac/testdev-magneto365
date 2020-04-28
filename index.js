@@ -56,7 +56,7 @@ async function filmsSW () {
       }
     })
 
-  const data = movies.map(movie => ({
+  return movies.map(movie => ({
     name: movie.name,
     planets: planets.map(planet => ({
       name: planet.name,
@@ -82,10 +82,6 @@ async function filmsSW () {
       passengers: starship.passengers
     }
   }))
-
-  console.log(JSON.stringify(data, null, 2))
 }
-
-filmsSW()
 
 module.exports = filmsSW
