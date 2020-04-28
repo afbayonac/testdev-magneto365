@@ -1,7 +1,6 @@
 const https = require('https')
 
 function fetch (url) {
-  console.log(url)
   return new Promise((resolve, reject) => {
     function callback (resp) {
       if (resp.statusCode < 200 || resp.statusCode >= 300) {

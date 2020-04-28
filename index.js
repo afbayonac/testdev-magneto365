@@ -9,7 +9,6 @@ const changeToSecure = (url) => [
 ].join('')
 
 const flatByPrperty = (list, property) => {
-  console.log(property)
   return list.reduce((aco, e) => [
     ...aco,
     ...e[property]
