@@ -20,7 +20,7 @@ const flatByPrperty = (list, property) => {
 
 const getSpecie = (species, urls) => {
   if (urls.length > 0) {
-    const specie = species.find(specie => urls[0].indexOf(specie.url) !== -1 )
+    const specie = species.find(specie => urls[0].indexOf(specie.url) !== -1)
     return {
       name: specie.name,
       language: specie.language,
@@ -35,7 +35,7 @@ const getSpecie = (species, urls) => {
   }
 }
 
-const fetchUrls =(urls) => Promise.all(urls.map(fetch))
+const fetchUrls = (urls) => Promise.all(urls.map(fetch))
 
 async function filmsSW () {
   const FILMS_URL = 'https://swapi.dev/api/films/'
