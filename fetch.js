@@ -1,6 +1,7 @@
 const https = require('https')
 
 function fetch (url) {
+  console.log(url)
   return new Promise((resolve, reject) => {
     function callback (resp) {
       if (resp.statusCode < 200 || resp.statusCode >= 300) {
@@ -9,13 +10,10 @@ function fetch (url) {
 
       const data = []
       resp.on('data', (chunk) => {
-        console.log('data')
         data.push(chunk)
       })
 
       resp.on('end', () => {
-        console.log('data')
-        console.log(data)
         try {
           resolve(JSON.parse(Buffer.concat(data).toString()))
         } catch (e) {
