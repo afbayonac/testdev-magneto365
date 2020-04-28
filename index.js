@@ -8,13 +8,31 @@ const changeToSecure = (url) => [
   url.slice(4)
 ].join('')
 
-const flatByPrperty = (list, Property) => {
+const flatByPrperty = (list, property) => {
+  console.log(property)
   return list.reduce((aco, e) => [
     ...aco,
-    ...e[Property]
+    ...e[property]
       .filter(e => aco.indexOf(e) === -1)
       .map(changeToSecure)
   ], [])
+}
+
+const getSpecie = (species, urls) => {
+  if (urls.length > 0) {
+    const specie = species.find(specie => urls[0].indexOf(specie.url) !== -1 )
+    return {
+      name: specie.name,
+      language: specie.language,
+      average_height: specie.average_height
+    }
+  }
+
+  return {
+    name: 'human',
+    language: 'english',
+    average_height: '1.72'
+  }
 }
 
 const fetchUrls =(urls) => Promise.all(urls.map(fetch))
@@ -25,34 +43,50 @@ async function filmsSW () {
   const movies = response.results
 
   const planets = await fetchUrls(flatByPrperty(movies, 'planets'))
-  const characters = await fetchUrls(flatByPrperty(movies, 'species'))
+  const characters = await fetchUrls(flatByPrperty(movies, 'characters'))
   const species = await fetchUrls(flatByPrperty(characters, 'species'))
-  const startship = await fetchUrls(flatByPrperty(movies, 'startship'))
+  const homeworlds = await fetchUrls(characters.map(e => changeToSecure(e.homeworld)))
+  const starships = await fetchUrls(flatByPrperty(movies, 'starships'))
 
-  console.log(species)
-  return movies.map(movie => ({
+  const starship = starships
+    .reduce((aco, startship) => {
+      if (!aco || aco.length < startship.length) {
+        return startship
+      } else {
+        return aco
+      }
+    })
+
+  const data = movies.map(movie => ({
     name: movie.name,
-    planets: planets.map(planete => ({
-
+    planets: planets.map(planet => ({
+      name: planet.name,
+      terrain: planet.terrain,
+      gravity: planet.gravity,
+      diameter: planet.diameter,
+      population: planet.population
     })),
-    characters: planets.map(planete => ({
-
+    characters: characters.map(character => ({
+      name: character.name,
+      gender: character.gender,
+      hair_color: character.hair_color,
+      skin_color: character.skin_color,
+      eye_color: character.eye_color,
+      homeworld: homeworlds
+        .find(h => h.url === character.homeworld).name,
+      species: getSpecie(species, character.species)
     })),
-    startships: planets
-      .reduce((aco, startship) => {
-        if (!aco || aco.length < startship.length) {
-          return startship
-        } else {
-          return aco
-        }
-      })
-      .map(planete => ({
-
-      }))
-
+    starships: {
+      name: starship.name,
+      model: starship.model,
+      manufacturer: starship.manufacturer,
+      passengers: starship.passengers
+    }
   }))
+
+  console.log(JSON.stringify(data, null, 2))
 }
 
-console.log(filmsSW())
+filmsSW()
 
-// module.exports = filmsSW
+module.exports = filmsSW
