@@ -1,9 +1,9 @@
 # Test Node
 
-[Andres Felipe Bayona Chinchilla](http://www.lullabylab.com)
+[Andres Felipe Bayona Chinchilla](http://www.lullabylab.com/summary/afbayonac.html)
 
 ## Run
 
 ```
-  npm start
+  npm test # to show output
 ```
